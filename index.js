@@ -4,7 +4,7 @@ const { Client, GatewayIntentBits } = require("discord.js");
 // Token desde variables de entorno
 const TOKEN = process.env.DISCORD_TOKEN;
 
-// Lista de frases de amor
+// Lista de frases de amor (puedes agregar todas tus 100+ frases)
 const frases = [
     "No sabemos lo que el futuro nos deparará, pero tengo claro que quiero que estés en mi vida y tenerte a mi lado por siempre.",
     "Eres una mujer maravillosa, hermosa y gentil, agradezco al cielo por haberte conocido, desde ese instante mi mundo cambió, se convirtió en uno lleno de paz, alegría y amor.",
@@ -134,8 +134,19 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
 });
 
-// Evitar repetición consecutiva
-let ultimaFrase = null;
+// Lista para ciclar las frases sin repetir
+let frasesDisponibles = [...frases];
+
+// Función para sacar una frase aleatoria sin repetir hasta agotar todas
+function obtenerFraseAleatoria() {
+  if (frasesDisponibles.length === 0) {
+    // Reiniciar la lista cuando ya se usaron todas
+    frasesDisponibles = [...frases];
+  }
+  const index = Math.floor(Math.random() * frasesDisponibles.length);
+  const frase = frasesDisponibles.splice(index, 1)[0];
+  return frase;
+}
 
 // Evento cuando el bot esté listo
 client.once("ready", () => {
@@ -145,3 +156,16 @@ client.once("ready", () => {
 // Comando: ʕっ•ᴥ•ʔっfrase 💝
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
+
+  if (message.content.startsWith("ʕっ•ᴥ•ʔっfrase") && message.content.includes("💝")) {
+    const frase = obtenerFraseAleatoria();
+    message.channel.send(frase);
+  }
+});
+
+// Login del bot
+if (TOKEN) {
+  client.login(TOKEN);
+} else {
+  console.error("❌ ERROR: No se encontró DISCORD_TOKEN en las variables de entorno");
+}
