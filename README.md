@@ -48,7 +48,7 @@ DISCORD_TOKEN=TU_TOKEN_DE_DISCORD
 
 ```json
 "scripts": {
-  "start": "node server.js"
+  "start": "node index.js"
 }
 ```
 
@@ -105,7 +105,7 @@ Render detiene servicios gratuitos después de **15 minutos de inactividad**. Pa
 ```
 discord-love-bot/
 │
-├─ server.js        # Código principal del bot + servidor HTTP
+├─ index.js        # Código principal del bot + servidor HTTP
 ├─ package.json     # Dependencias y scripts
 ├─ package-lock.json
 └─ .env             # Token de Discord
@@ -116,7 +116,7 @@ discord-love-bot/
 ## ⚠️ Notas importantes
 
 * Mantén tu `DISCORD_TOKEN` **privado**.
-* Puedes agregar o modificar las frases dentro del array `frases` en `server.js`.
+* Puedes agregar o modificar las frases dentro del array `frases` en `index.js`.
 * El servidor HTTP solo mantiene vivo el bot en Render, no afecta su funcionalidad en Discord.
 
 ---
