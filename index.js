@@ -1,10 +1,10 @@
 require("dotenv").config();
-const express = require("express"); // Nuevo
+const express = require("express");
 const { Client, GatewayIntentBits } = require("discord.js");
 
 // Token desde variables de entorno
 const TOKEN = process.env.DISCORD_TOKEN;
-const PORT = process.env.PORT || 3000; // Puerto para Render
+const PORT = process.env.PORT || 3000;
 
 // Lista de frases de amor
 const frases = [
@@ -170,7 +170,7 @@ if (TOKEN) {
   console.error("❌ ERROR: No se encontró DISCORD_TOKEN en las variables de entorno");
 }
 
-// ====== Servidor HTTP para mantener vivo en Render ======
+// ====== Servidor HTTP para mantener vivo en Render ====== //
 const app = express();
 
 app.get("/", (req, res) => {
@@ -180,3 +180,4 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`🌐 Servidor HTTP escuchando en puerto ${PORT}`);
 });
+
