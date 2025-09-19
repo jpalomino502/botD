@@ -1,8 +1,10 @@
 require("dotenv").config();
 const { Client, GatewayIntentBits } = require("discord.js");
+const express = require("express");
 
-// Token desde .env o Render
+// Token desde variables de entorno
 const TOKEN = process.env.DISCORD_TOKEN;
+const PORT = process.env.PORT || 3000;
 
 // Lista de frases de amor
 const frases = [
@@ -134,6 +136,10 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
 });
 
+// Evitar repetición consecutiva
+let ultimaFrase = null;
+
+// Evento cuando el bot esté listo
 client.once("ready", () => {
   console.log(`✅ Bot conectado como ${client.user.tag}`);
 });
@@ -143,14 +149,30 @@ client.on("messageCreate", (message) => {
   if (message.author.bot) return;
 
   if (message.content.startsWith("ʕっ•ᴥ•ʔっfrase") && message.content.includes("💝")) {
-    const frase = frases[Math.floor(Math.random() * frases.length)];
+    let frase;
+    do {
+      frase = frases[Math.floor(Math.random() * frases.length)];
+    } while (frase === ultimaFrase && frases.length > 1);
+
+    ultimaFrase = frase;
     message.channel.send(frase);
   }
 });
 
+// Login del bot
 if (TOKEN) {
   client.login(TOKEN);
 } else {
   console.error("❌ ERROR: No se encontró DISCORD_TOKEN en las variables de entorno");
 }
 
+// Crear servidor web para Render
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("🤖 Bot de Discord corriendo!");
+});
+
+app.listen(PORT, () => {
+  console.log(`🌐 Servidor web escuchando en el puerto ${PORT}`);
+});
