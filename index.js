@@ -1,10 +1,12 @@
 require("dotenv").config();
+const express = require("express"); // Nuevo
 const { Client, GatewayIntentBits } = require("discord.js");
 
 // Token desde variables de entorno
 const TOKEN = process.env.DISCORD_TOKEN;
+const PORT = process.env.PORT || 3000; // Puerto para Render
 
-// Lista de frases de amor (puedes agregar todas tus 100+ frases)
+// Lista de frases de amor
 const frases = [
     "No sabemos lo que el futuro nos deparará, pero tengo claro que quiero que estés en mi vida y tenerte a mi lado por siempre.",
     "Eres una mujer maravillosa, hermosa y gentil, agradezco al cielo por haberte conocido, desde ese instante mi mundo cambió, se convirtió en uno lleno de paz, alegría y amor.",
@@ -140,12 +142,10 @@ let frasesDisponibles = [...frases];
 // Función para sacar una frase aleatoria sin repetir hasta agotar todas
 function obtenerFraseAleatoria() {
   if (frasesDisponibles.length === 0) {
-    // Reiniciar la lista cuando ya se usaron todas
     frasesDisponibles = [...frases];
   }
   const index = Math.floor(Math.random() * frasesDisponibles.length);
-  const frase = frasesDisponibles.splice(index, 1)[0];
-  return frase;
+  return frasesDisponibles.splice(index, 1)[0];
 }
 
 // Evento cuando el bot esté listo
@@ -169,3 +169,14 @@ if (TOKEN) {
 } else {
   console.error("❌ ERROR: No se encontró DISCORD_TOKEN en las variables de entorno");
 }
+
+// ====== Servidor HTTP para mantener vivo en Render ======
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("🤖 Bot de Discord activo y escuchando comandos!");
+});
+
+app.listen(PORT, () => {
+  console.log(`🌐 Servidor HTTP escuchando en puerto ${PORT}`);
+});
